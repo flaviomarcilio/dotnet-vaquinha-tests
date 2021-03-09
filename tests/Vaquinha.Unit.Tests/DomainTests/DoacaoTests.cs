@@ -20,7 +20,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             _cartaoCreditoFixture = cartaoCreditoFixture;
         }
 
-        [Fact]
+        [Fact] // Caso de teste - Xunit
         [Trait("Doacao", "Doacao_CorretamentePreenchidos_DoacaoValida")]
         public void Doacao_CorretamentePreenchidos_DoacaoValida()
         {           
@@ -35,6 +35,22 @@ namespace Vaquinha.Unit.Tests.DomainTests
             // Assert
             valido.Should().BeTrue(because: "os campos foram preenchidos corretamente");
             doacao.ErrorMessages.Should().BeEmpty();
+        }
+
+        [Fact]
+        [Trait("Doacao", "Doacao_UsuarioAceitaPagarComTaxa_DoacaoValida")]
+        public void Doacao_UsuarioAceitaPagarComTaxa_DoacaoValida()
+        {           
+            // Arrange
+            var doacao = _doacaoFixture.DoacaoValida(false, 5, false, true);
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+
+            // Act
+            var valido = doacao.Valido();
+
+            // Assert
+            doacao.Valor.Should().Be(6, because: "valor com taxa de 20%");
         }
 
         [Fact]
@@ -90,7 +106,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
         public void Doacao_ValoresDoacaoMaiorLimite_DoacaoInvalida(double valorDoacao)
         {
             // Arrange
-            const bool EXCEDER_MAX_VALOR_DOACAO = true;
+            // const bool EXCEDER_MAX_VALOR_DOACAO = true;
             var doacao = _doacaoFixture.DoacaoValida(false, valorDoacao);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
             doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());

@@ -9,7 +9,8 @@ namespace Vaquinha.Domain.Entities
         private Doacao() { }
 
         public Doacao(Guid id, Guid dadosPessoaisId, Guid enderecoCobrancaId, double valor,
-                      Pessoa dadosPessoais, CartaoCredito formaPagamento, Endereco enderecoCobranca)
+                      Pessoa dadosPessoais, CartaoCredito formaPagamento, Endereco enderecoCobranca,
+                      bool aceitaTaxa = false)
         {
             Id = id;
             DataHora = DateTime.Now;
@@ -17,7 +18,7 @@ namespace Vaquinha.Domain.Entities
             DadosPessoaisId = dadosPessoaisId;
             EnderecoCobrancaId = enderecoCobrancaId;
 
-            Valor = valor;
+            Valor = aceitaTaxa ? valor * 1.2 : valor;
 
             DadosPessoais = dadosPessoais;
             FormaPagamento = formaPagamento;
@@ -34,6 +35,8 @@ namespace Vaquinha.Domain.Entities
         public Pessoa DadosPessoais { get; private set; }
         public Endereco EnderecoCobranca { get; private set; }
         public CartaoCredito FormaPagamento { get; private set; }
+
+        public bool AceitaTaxa { get; private set; }
 
         public void AtualizarDataCompra()
         {
@@ -68,8 +71,8 @@ namespace Vaquinha.Domain.Entities
                 .LessThanOrEqualTo(4500).WithMessage("Valor máximo para a doação é de R$4.500,00");
 
             RuleFor(a => a.DadosPessoais).NotNull().WithMessage("Os Dados Pessoais são obrigatórios").SetValidator(new PessoaValidacao());
-            RuleFor(a => a.EnderecoCobranca).NotNull().WithMessage("O Endereço de Cobrança é obtigatório.").SetValidator(new EnderecoValidacao());
-            RuleFor(a => a.FormaPagamento).NotNull().WithMessage("A Forma de Pagamento é obtigatória.").SetValidator(new CartaoCreditoValidacao());
+            RuleFor(a => a.EnderecoCobranca).NotNull().WithMessage("O Endereço de Cobrança é obrigatório.").SetValidator(new EnderecoValidacao());
+            RuleFor(a => a.FormaPagamento).NotNull().WithMessage("A Forma de Pagamento é obrigatória.").SetValidator(new CartaoCreditoValidacao());
         }
     }
 }

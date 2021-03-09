@@ -1,4 +1,4 @@
-﻿using Bogus;
+﻿using Bogus; // Gera os fakers
 using Bogus.DataSets;
 using System;
 using System.Collections.Generic;

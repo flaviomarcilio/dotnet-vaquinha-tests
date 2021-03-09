@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
-using Vaquinha.MVC;
 
 namespace Vaquinha.Unit.Tests.Extensions
 {
